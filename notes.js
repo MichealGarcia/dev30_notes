@@ -249,3 +249,480 @@ family.splice(family.indexOf('Cat'), 2)
 // If I want  to replace a value or several, I add the values as paramters after the index and amount.
 
 family.splice(family.indexOf('Micheal'), 2, 'Becca', 'Jon')
+
+// ARRAYS AND FUNCTIONS
+
+// What happens if we change an array inside of a function?
+// does it change the array? in global?
+
+var addItem = function () {
+    family.push('Miguel');
+};
+
+// What if you make the array a parameter?
+// It will do the same thing if the specific array is the value used
+// for the parameter
+
+var removeItem = function (array) {
+    family.pop();
+};
+
+// BUT, if the array is in the function scope.
+// Then it wouldn't exist in the global execution context
+// Not unless you use return and declare a variable that will
+// hold that functions return.
+
+// If you change the global variable which holds a function returning an array
+// Will it change the functions array?
+
+// It doesn't matter because there is nothing pointing to te initial function, unless
+// it is saved as a new variable.
+// You can declare two functions that will hold the same arrays, to start
+// Then change them individually.
+
+var petDogs = function () {
+    let dogs = ['Willy', 'Shiloh', 'Kona', 'Anna'];
+    return dogs
+};
+
+myDogs = petDogs();
+
+herDogs = petDogs();
+
+herDogs.pop();
+myDogs.splice(0, 3, 'Cricket', 'Bruster');
+
+// Two separate lists, from one list inside a function.
+// Each function call invokes two individual execution context
+console.log(herDogs);
+console.log(myDogs);
+
+
+// Arrays can also have arrays inside of them as a data type.
+
+var cookieJar1 = ['cookie 1', 'cookie 2', 'cookie 3', 'cookie 4', 'cookie 5'];
+var cookieJar2 = ['cookie 1', 'cookie 2', 'cookie 3', 'cookie 4', 'cookie 5'];
+var cookieJar3 = ['cookie 1', 'cookie 2', 'cookie 3', 'cookie 4', 'cookie 5'];
+
+var neighborhoodCookies = [cookieJar1, cookieJar2, cookieJar3];
+
+// In order to call items inside of these nested arrays, you use double square brackets "[][]"
+
+// If I want cookie 3 inside of cookieJar2
+
+let myCookie = neighborhoodCookies[1][2]
+
+
+
+// LOOPS
+// CREATE A FUNCTION THAT FINDS IF ITEM IN LIST
+var names = ['Larissa', 'Sean', 'Haley', 'Deeksha', 'Gunnar'];
+
+
+var doesLiveHere = function (names, resident) {
+    resident = resident.toLowerCase();
+
+    for (let i = 0; i < names.length; i++) {
+        // console.log(names[i]);
+        let name = names[i]
+
+        name = name.toLowerCase()
+
+        if (name === resident) {
+            return true;
+        }
+    }
+    return false;
+};
+
+
+var doesHaleyLiveHere = doesLiveHere(names, 'haley');
+
+console.log(doesHaleyLiveHere);
+
+
+
+//  INTRO TO ARRAY HELPER METHODS
+
+// Callback functions
+
+// Whenever you have a function, and when you call it, it calls another function.
+
+// A callback function
+
+// function(function);
+
+// anonomys function
+
+// function(function () {
+//     console.log('anon')
+// });
+
+
+
+// forEach fcuntion = for loop
+
+// Use this when you want to preform an operation on every element in an array.
+
+// there is a lot of syntax in a for loop, a forEach function will reduce the work.
+
+// syntax
+var numbers = [1, 2, 3, 4, 5];
+
+
+numbers.forEach(function (number) {
+    console.log(number);
+})
+
+// forEach takes anonmous callbuck functions and invokes it for each item
+
+
+// here is forEach, from scratch:
+
+array.prototype.myForEach = function (callback) {
+    for (let i = 0; i < this.length; i++) {
+        const element = this[i];
+
+        callback(element);
+
+    }
+};
+
+// So, when you call the myForEach function
+// 'this' variable is taking the object calling the mthod
+// and injecting it as the object in the for loop
+// then after the for loop you have code that will run for every iteration
+// in this case, or for the forEach() function, it will print out each
+// item in the array on a new line.
+
+
+// forEach also takes two extra parameters, index and array
+
+
+
+// numbers === this
+// the function is === callback
+// 
+numbers.myForEach(function (number) {
+    console.log(number);
+});
+
+
+// var saveuser = function () {
+//     console.log('saving', user.name);
+// }
+
+// var saveUSers = function () {
+//     var users = [
+//         { id: 15, name: 'Bob' },
+//         { id: 23, name: 'Jimbo' },
+//         { id: 35, name: 'Cathy' }
+//     ];
+
+//     for (var i = 0; i < users.length; i++) {
+//         saveuser(users[i]);
+//     }
+// }
+
+// REFACTOR USING forEach
+
+var saveUser = function (user) {
+    console.log('saving', user.name);
+}
+
+var saveUsers = function () {
+    var users = [
+        { id: 15, name: 'Bob' },
+        { id: 23, name: 'Jimbo' },
+        { id: 35, name: 'Cathy' }
+    ];
+
+    users.forEach(saveUser);
+};
+
+saveUsers();
+
+
+// Array.prototype.myForEach = function (callback) {
+//     for (let i = 0; i < this.length; i++) {
+
+//         callback(this[i], i, this);
+
+//     }
+// };
+
+
+
+
+
+// EXERCISE 2
+
+// use forEach to calculate the volumes of each box
+
+var boxes = [
+    { length: 10, width: 15, height: 20 },
+    { length: 15, width: 20, height: 25 },
+    { length: 20, width: 25, height: 30 },
+    { length: 25, width: 30, height: 35 },
+    { length: 30, width: 35, height: 40 },
+];
+
+var volumes = [];
+
+
+boxes.forEach(function (box) {
+    // console.log(box)
+    let volume = box['length'] * box['width'] * box['height'];
+    volumes.push(volume);
+})
+
+console.log(volumes);
+
+// There is an easier way to do this, with map()
+
+
+// MAP
+// Use this when you want to create a new array that is based on the 
+// elements of another array and of similar size.
+// 
+
+// You are going to save the new array , 
+// by declaring a variable that will run map
+
+var boxes = [
+    { length: 10, width: 15, height: 20 },
+    { length: 15, width: 20, height: 25 },
+    { length: 20, width: 25, height: 30 },
+    { length: 25, width: 30, height: 35 },
+    { length: 30, width: 35, height: 40 },
+];
+
+var volumes = boxes.map(function (box) {
+    return box['length'] * box['width'] * box['height'];
+});
+
+console.log(volumes);
+
+
+// another example
+
+var nums = [1, 2, 3];
+var increasedNums = [];
+
+for (var i = 0; i < nums.length; i++) {
+    increasedNums.push((nums[i] += 5));
+};
+
+console.log(increasedNums);
+
+// instead of creating a new array
+
+var increasedNums2 = nums.map(function (num) {
+    return num += 5
+});
+
+console.log(increasedNums2);
+
+// Making map from scratch
+
+// Add it to Array prototype
+Array.prototype.myMap = function (callback) {
+    const returnArray = [];
+
+    for (let i = 0; i < this.length; i++) {
+        returnArray.push(callback(this[i], i, this))
+
+    }
+
+    return returnArray
+};
+
+
+
+// Use this next example to think of some use cases
+
+var budgets = [
+    { title: "Rent", amount: 1200 },
+    { title: "Groceries", amount: 300 },
+    { title: "Phone", amount: 50 },
+    { title: "Gas", amount: 200 },
+    { title: "Internet", amount: 45 },
+];
+
+var expenses = budgets.map(function (budget) {
+    return budget.amount;
+});
+
+console.log(expenses); // [1200, 300, 50, 200, 45];
+
+// finding a budget, allocating funds, allocating data,
+// creating a profile (or saving data information from input)?
+
+
+// map exercise one
+
+// Given an array of budget objects, use map to create an
+// array of formatted string describing each budget item.
+// EXAMPLE
+// {title: 'coffee', amount: 25}
+// "coffee (25)"
+
+var budgets = [
+    { title: "Rent", amount: 1200 },
+    { title: "Groceries", amount: 300 },
+    { title: "Phone", amount: 50 },
+    { title: "Gas", amount: 200 },
+    { title: "Internet", amount: 45 },
+];
+
+// we should get an array of strings that look like our example above.
+
+// map object
+var budgetItems = budgets.map(function (item) {
+    // return budget.title + " (" + budget.amount + ")";
+    return (`${item['title']} (${item['amount']})`)
+});
+
+console.log(budgetItems);
+
+
+// Exercise 2
+
+var boxes = [
+    { length: 10, width: 15, height: 20 },
+    { length: 15, width: 20, height: 25 },
+    { length: 20, width: 25, height: 30 },
+    { length: 25, width: 30, height: 35 },
+    { length: 30, width: 35, height: 40 },
+];
+
+var lengths = boxes.map(function (box) {
+    return box.length;
+});
+
+console.log(lengths);
+
+// exercise 3
+
+var boxes = [
+    { length: 10, width: 15, height: 20 },
+    { length: 15, width: 20, height: 25 },
+    { length: 20, width: 25, height: 30 },
+    { length: 25, width: 30, height: 35 },
+    { length: 30, width: 35, height: 40 },
+];
+
+var volumes = boxes.map(function (box) {
+    return box.length * box.width * box.height;
+});
+
+console.log(volumes);
+
+// exercise 4
+// introucing helper method pluck
+// It takes two arguments, and array of objects and a string
+
+var users = [
+    { id: 1, name: "Bob", email: "bob@gmail.com" },
+    { id: 2, name: "Cindy", email: "cindy@gmail.com" },
+    { id: 3, name: "Susan", email: "susan@gmail.com" },
+    { id: 4, name: "Sarah", email: "sarah@gmail.com" },
+    { id: 5, name: "Tim", email: "tim@gmail.com" },
+];
+
+// create a function to grab information
+var pluck = function (array, property) {
+    // declare a new array to output when called
+    newArray = [];
+    // use the map function to 
+    array.map(function (item) {
+        newArray.push(item[property]);
+    })
+
+    console.log(newArray);
+
+};
+
+pluck(users, "email"); // returns ['bob@gmail.com', `cindy@gmail.com`, `susan@gmail.com`, `sarah@gmail.com`, `tim@gmail.com` ];
+
+// The issue with my code, is that it console logs the data, it doesnt actually
+// return it to the gobal scope.
+
+// more correct code
+
+var pluck = function (array, property) {
+    // You will usually save the map function as a new variable.
+    return array.map(function (item) {
+        // then return the item that you are pushing to the new array.
+        return item[property];
+    });
+};
+
+// the pluck function is being called to find specific items in a database
+// you could apply this method to an app to try and look up users/anything.
+
+
+// find
+
+// Use this when you want to find a particular element in an array.
+// It takes a function that returns truthy/falsey value and returns
+// the first value in the the array that returns true.
+// This does not return a new array.
+
+var users = [
+    { id: 1, username: 'Susan19', admin: false },
+    { id: 2, username: 'Antonio10', admin: false },
+    { id: 3, username: 'Fred15', admin: true },
+    { id: 4, username: 'Tim43', admin: false },
+    { id: 5, username: 'JimBob59', admin: true },
+    { id: 6, username: 'Clark6', admin: false },
+    { id: 7, username: 'Jameson35', admin: true },
+    { id: 8, username: 'Jessica40', admin: false },
+    { id: 9, username: 'Jaleesa13', admin: false },
+    { id: 10, username: 'Yoni45', admin: false }
+];
+
+
+// We want to save our value returned by the find function
+
+var selectedUser = users.find(function (user) {
+    return user.username === "JimBob59";
+});
+
+console.log(selectedUser);
+
+
+// exercise 2
+
+// return an item that has price less than 100. lessThan100
+
+var shoes = [
+    { name: 'Nike', price: 200 },
+    { name: 'Red Wings', price: 250 },
+    { name: 'Vans', price: 150 },
+    { name: 'Converse', price: 160 },
+    { name: 'Reebok', price: 130 },
+    { name: 'New Balance', price: 175 },
+    { name: 'Adidas', price: 95 },
+    { name: 'Keds', price: 140 },
+    { name: 'Crocs', price: 135 }
+];
+
+var lessThan100 = shoes.find(function (shoe) {
+    return shoe.price < 100;
+});
+
+console.log(lessThan100);
+
+
+var findWhere = function (array, objCriteria) {
+    var property = Object.keys(objCriteria)[0];
+    // console.log(property);
+
+    var result = array.find(function (element) {
+        return element[property] === objCriteria[property];
+    });
+    return result;
+};
+
+console.log(findWhere(shoes, { price: 95 }));
